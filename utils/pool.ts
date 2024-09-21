@@ -244,10 +244,7 @@ async function downloadWithRetry<T extends DownloadResource>(pool: ProxyPool, re
 }
 
 
-const proxyList : string[] = Deno.env.get("proxy_list");
-console.log(proxyList);
-// export const pool = new ProxyPool(AVAILABLE_PROXY_LIST);
-export const pool = new ProxyPool(proxyList);
+export const pool = new ProxyPool(AVAILABLE_PROXY_LIST);
 
 /**
  * 使用代理池下载单个资源
