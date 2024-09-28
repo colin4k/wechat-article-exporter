@@ -5,13 +5,13 @@
     </Teleport>
     <div class="flex flex-1 overflow-hidden">
       <ul class="flex flex-col h-full w-fit overflow-y-scroll divide-y">
-        <li v-for="accountInfo in cachedAccountInfos" :key="accountInfo.fakeid" class="relative px-4 pr-16 py-4"
+        <li v-for="accountInfo in cachedAccountInfos" :key="accountInfo.fakeid" class="relative px-4 pr-16 py-4 hover:bg-slate-3 hover:cursor-pointer transition"
             :class="{'bg-slate-3': selectedAccount === accountInfo.fakeid}" @click="toggleSelectedAccount(accountInfo)">
           <p>公众号:
             <span v-if="accountInfo.nickname" class="text-xl font-medium">{{ accountInfo.nickname }}</span>
           </p>
           <p>ID: <span class="font-mono">{{ accountInfo.fakeid }}</span></p>
-          <UBadge variant="subtle" color="red" class="absolute top-4 right-2">{{ accountInfo.articles }}</UBadge>
+          <UBadge variant="subtle" color="green" class="absolute top-4 right-2">{{ accountInfo.articles }}</UBadge>
         </li>
       </ul>
 
@@ -67,7 +67,7 @@
                 <Loader v-if="batchDownloadLoading" :size="20" class="animate-spin"/>
                 <span v-if="batchDownloadLoading">{{ batchDownloadPhase }}:
                   <span
-                      v-if="batchDownloadPhase === '下载文章内容'">{{ batchDownloadedCount }}/{{ selectedArticles.length }}</span>
+                      v-if="batchDownloadPhase === '下载文章内容'">{{ batchDownloadedCount }}/{{ selectedArticleCount }}</span>
                   <span
                       v-if="batchDownloadPhase === '打包'">{{ batchPackedCount }}/{{ batchDownloadedCount }}</span>
                 </span>
@@ -88,6 +88,7 @@
               <th>作者</th>
               <th class="w-24">是否原创</th>
               <th class="w-36">所属合集</th>
+              <th class="w-12">原文</th>
             </tr>
             </thead>
             <tbody>
@@ -107,12 +108,18 @@
                         class="text-blue-600 mr-2">#{{ album.title }}</span>
                 </p>
               </td>
+              <td class="text-center">
+                <a class="text-blue-500 underline" :href="article.link" target="_blank">
+                  <UIcon name="i-heroicons-link-16-solid" class="w-5 h-5" />
+                </a>
+              </td>
             </tr>
             </tbody>
           </table>
           <!-- 状态栏 -->
-          <div class="sticky bottom-0 h-[40px] bg-white text-rose-500 flex items-center px-4">
-            共 {{ displayedArticles.length }} 条有效数据和 {{deletedArticlesCount}} 条删除数据(已隐藏)，已选中 {{ selectedArticles.length }} 条数据
+          <div class="sticky bottom-0 h-[40px] bg-white flex items-center px-4 space-x-10 border-t-2 font-mono">
+            <span class="text-green-500">已选 {{ selectedArticles.length }} / {{ displayedArticles.length }}</span>
+            <span class="text-rose-300" v-if="deletedArticlesCount > 0">已隐藏 {{deletedArticlesCount}} 条删除文章</span>
           </div>
         </div>
       </main>
@@ -194,7 +201,7 @@ async function switchTableData(fakeid: string) {
   }
 }
 
-function maxLen(text: string, max = 45): string {
+function maxLen(text: string, max = 35): string {
   if (text.length > max) {
     return text.slice(0, max) + '...'
   }
@@ -313,12 +320,14 @@ const {
   packedCount: batchPackedCount,
   download: batchDownload,
 } = useBatchDownload()
+const selectedArticleCount = ref(0)
 function doBatchDownload() {
   const articles: DownloadableArticle[] = selectedArticles.value.map(article => ({
     title: article.title,
     url: article.link,
     date: +article.update_time,
   }))
+  selectedArticleCount.value = articles.length
   const filename = selectedAccountName.value
   batchDownload(articles, filename)
 }

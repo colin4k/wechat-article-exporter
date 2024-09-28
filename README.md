@@ -1,16 +1,17 @@
 <p align="center">
-  <img src="./public/favicon.ico" alt="Logo" width="100">
+  <img src="./assets/logo.svg" alt="Logo">
 </p>
 
-<h3 align="center">微信公众号文章导出工具，100%还原文章样式。</h3>
+# wechat-article-exporter
 
 [![Deploy][deploy-badge]][deploy]
 ![GitHub stars]
 ![GitHub forks]
 ![GitHub License]
-![Website]
 ![GitHub commit activity]
 ![GitHub last commit]
+
+在线批量导出微信公众号文章，支持内嵌的音视频导出，无需搭建任何环境，可100%还原文章样式，支持私有部署。
 
 
 ## :dart: 特性
@@ -22,12 +23,13 @@
 - [x] 缓存文章列表数据，减少接口请求次数 (关键字搜索的文章不会进入缓存)
 - [x] 过滤已删除文章
 - [x] 支持合集下载
-- [ ] 支持图片分享消息
+- [x] 支持内嵌的音视频下载
+- [x] 支持图片分享消息
 - [ ] 支持导出评论(需要获取目标公众号的key)
-- [ ] 支持导出 md/docx/pdf/image 格式(需要技术调研，最终样式不能保证100%还原)
+- [ ] 支持订阅机制，根据指定规则自动下载文章
 
 
-## :hammer: 使用
+## :hammer: 如何使用
 
 1. 注册一个微信公众号 (已有账号的话跳过)
 
@@ -96,10 +98,6 @@
 在公众号后台写文章时支持搜索其他公众号的文章功能，以此来实现抓取指定公众号所有文章的目的。
 
 
-## :loudspeaker: 关于批量导出
-
-由于微信对相关接口有额度/频率的调用限制，所以批量导出功能并不会去批量获取新的数据，仅仅是将已缓存的数据导出。由于翻页时已经将数据进行了缓存，所以批量导出的数据即页面所显示的数据。
-
 
 ## :earth_americas: 关于代理池
 
@@ -113,16 +111,23 @@ https://vproxy-03.deno.dev
 https://vproxy-04.deno.dev
 https://vproxy-05.deno.dev
 https://vproxy-06.deno.dev
+https://vproxy-07.deno.dev
+https://vproxy-08.deno.dev
+https://vproxy-09.deno.dev
+https://vproxy-10.deno.dev
+https://vproxy-11.deno.dev
+https://vproxy-12.deno.dev
+https://vproxy-13.deno.dev
+https://vproxy-14.deno.dev
+https://vproxy-15.deno.dev
+https://vproxy-16.deno.dev
 https://vproxy-01.jooooock.workers.dev
 https://vproxy-02.jooooock.workers.dev
 ```
 
 > 以上节点都是部署在 Deno Deploy / Cloudflare Workers 上面的免费账户中，算是白嫖了这些托管平台的流量。
 >
-> 代理节点越多，则下载速度越快。
-> 因此欢迎大家自己搭建一些节点，并进行共享。
->
-> 目前这些节点是公开的，后续打算加入签名验证机制，防止被恶意盗刷。
+> 目前这些节点都是公开的，后续打算加入签名验证机制，防止被恶意盗刷。
 
 代理节点代码 (未进行签名验证，请酌情使用):
 
@@ -248,6 +253,12 @@ export default {
 </details>
 
 
+## 关于导出其他格式
+本项目暂不支持除`html`格式之外的其他格式，很大一部分原因是样式很难保真。如果需要其他格式，可以寻找其他格式转换工具。
+
+> PDF格式可参考: https://github.com/colin4k/wechat-article-dl
+
+
 ## :heart: 感谢
 
 - 感谢 [Deno Deploy]、[Cloudflare Workers] 提供免费托管服务
@@ -286,8 +297,6 @@ MIT
 [Github forks]: https://img.shields.io/github/forks/jooooock/wechat-article-exporter?style=social&label=Fork&style=plastic
 
 [Github License]: https://img.shields.io/github/license/jooooock/wechat-article-exporter?label=License
-
-[Website]: https://img.shields.io/website?url=https%3A%2F%2Fwechat-article-exporter.deno.dev%2F&label=Website
 
 [Github commit activity]: https://img.shields.io/github/commit-activity/w/jooooock/wechat-article-exporter
 
